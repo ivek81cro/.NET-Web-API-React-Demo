@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Product } from '../models/product';
 import Catalog from '../../features/catalog/Catalog';
 import { Box, Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
-import NavBar from './Navbar';
+import NavBar from '../layout/NavBar';
 
 function App() {
   const [productList, setProductList] = useState<Product[]>([]);

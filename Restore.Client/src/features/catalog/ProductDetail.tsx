@@ -1,21 +1,14 @@
-import { useParams } from "react-router-dom"
-import type { Product } from "../../app/models/product";
-import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom"
 import { Button, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import { useFetchProductDetailsQuery } from "./catalogApi";
 
 export default function ProductDetail() {
 
   const { id } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
+  const {data: product, isLoading} = useFetchProductDetailsQuery(id ? +id : 0);
 
-  useEffect(() => {
-    fetch(`https://localhost:5001/api/products/${id}`)
-      .then(response => response.json())
-      .then(data => setProduct(data))
-      .catch(error => console.error('Error fetching product:', error));
-  }, [id]);
-
-  if(!product) return <div>Loading...</div>;
+  if(!product || isLoading) return <div>Loading...</div>;
 
   const productDetails =[
     { label: 'Name', value: product.name },
@@ -26,12 +19,26 @@ export default function ProductDetail() {
   ]
 
   return (
-    <Grid container spacing={6} maxWidth="lg" sx={{mx: 'auto'}}>
+    <Grid container spacing={3} maxWidth="lg" sx={{mx: 'auto'}}>
+      <Grid size={12}>
+        <Button 
+          component={Link} 
+          to="/catalog" 
+          variant="contained" 
+          color="primary"
+          startIcon={<ArrowBack />}
+          sx={{mb: 1, borderRadius: '15px'}}
+        >
+            Back to Products
+        </Button>
+      </Grid>  
+
       <Grid size={6}>
         <img 
           src={product?.pictureUrl} 
           alt={product?.name}
-          style={{ width: '100%' }}
+          style={{ width: '100%', borderRadius: '12px' }}
+          
         />
       </Grid>
       <Grid size={6}>
